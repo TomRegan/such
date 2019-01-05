@@ -1,9 +1,8 @@
 # ![ ](etc/assets/such_64px.png) such
 
-### Ignorance plus monads
+### ignorance plus monads
 
 # 🧭 Getting Started
-
 Such isn't intended to be used - it's just an experiment! But welcome 👋 take a look around and feel free to hmu 🙂
 
 `./gradlew build`
@@ -22,13 +21,10 @@ Functional basics
 Extensions and tools for testing
 
 # 🏗 Build
-
 `./gradlew build` compiles the code, runs the tests, and builds the libraries.
 
 # 🚚 Contributing
-
 This is a play-piece and I'm not actively seeking contributions.
 
-### Issues
-
+# 🐛 Issues
 Bug reports are always welcome!
