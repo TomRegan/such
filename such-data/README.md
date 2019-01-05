@@ -1,0 +1,1 @@
+Lower order abstractions such as Equals, Semigroups, and Monoids
