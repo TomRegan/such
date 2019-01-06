@@ -3,12 +3,7 @@ package su.ch
 import nl.jqno.equalsverifier.EqualsVerifier
 
 
-class IsComparable {
+object IsComparable {
 
-    companion object {
-        @JvmStatic fun <T> isComparable(cls: Class<T>): Unit {
-            EqualsVerifier.forClass(cls).verify()
-            return Unit.Unit
-        }
-    }
+    @JvmStatic fun <T> isComparable(cls: Class<T>) = EqualsVerifier.forClass(cls).verify()
 }
