@@ -16,19 +16,22 @@
 
 package su.ch;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static su.ch.IsComparable.isComparable;
 import static su.ch.ToClassName.toClassName;
 
-public class ToClassNameTest {
+class ToClassNameTest {
 
-    class TestClass {}
+    @SuppressWarnings("WeakerAccess") class TestClass {}
 
-    @Test
-    public void apply() {
+    @Test void equalsAndHashcode() {
+        isComparable(ToClassName.class);
+    }
+
+    @Test void apply() {
         assertThat(toClassName(new TestClass()), equalTo("TestClass"));
-
     }
 }

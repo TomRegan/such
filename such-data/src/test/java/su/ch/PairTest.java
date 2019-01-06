@@ -21,8 +21,7 @@ import org.junit.jupiter.api.Test;
 import static su.ch.IsComparable.isComparable;
 
 class PairTest {
-    @Test
-    void equalsAndHashcode() {
+    @Test void equalsAndHashcode() {
         isComparable(Pair.class);
     }
 }

@@ -19,14 +19,17 @@ package su.ch
 import su.ch.annotation.Pure
 import java.lang.Integer.toHexString
 
-@Pure
-object ToClassName : Function<String> {
+@Pure object ToClassName : Function<String> {
 
     @JvmStatic fun toClassName(obj: Any) = invoke(obj)
 
-    operator fun invoke(obj: Any): String =
+    @Pure operator fun invoke(obj: Any): String =
             if (obj.javaClass.simpleName.isEmpty())
                 obj.javaClass.name.substring(obj.javaClass.name.lastIndexOf(".") + 1) +
                         "@" + toHexString(obj.hashCode())
             else obj.javaClass.simpleName
+
+    @Pure override fun equals(other: Any?): Boolean = other is ToClassName
+
+    @Pure override fun hashCode(): Int = 0
 }

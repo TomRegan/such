@@ -23,8 +23,14 @@ subprojects {
         implementation("nl.jqno.equalsverifier:equalsverifier:2.1.1")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.11")
         testImplementation("junit:junit:4.12")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.0")
         testImplementation("org.mockito:mockito-core:2.2.11")
         testImplementation("org.hamcrest:hamcrest-all:1.3")
         testImplementation("com.google.guava:guava:21.0")
+    }
+
+    tasks.test {
+        useJUnitPlatform()
     }
 }
