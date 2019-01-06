@@ -1,28 +1,22 @@
 package su.ch.that;
 
 import org.hamcrest.Description;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static su.ch.that.IsOptional.isOptionalWithValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class IsOptionalTest {
+class IsOptionalTest {
 
+    @Test void emptyOptionalShouldMatch() {
 
-    @Test
-    public void emptyOptionalShouldMatch() throws Exception {
-
-        MatcherAssert.assertThat(Optional.empty(), IsOptional.isEmptyOptional());
+        assertThat(Optional.empty(), IsOptional.isEmptyOptional());
     }
 
-
-    @Test
-    public void optionalWithValueShouldNotMatch() throws Exception {
+    @Test void optionalWithValueShouldNotMatch() {
 
         IsOptional opt = IsOptional.isEmptyOptional();
 
@@ -33,9 +27,7 @@ public class IsOptionalTest {
                 is("was an Optional with the value 3"));
     }
 
-
-    @Test
-    public void shouldDescribeEmptyOptional() throws Exception {
+    @Test void shouldDescribeEmptyOptional() {
 
         IsOptional opt = IsOptional.isEmptyOptional();
 
@@ -44,20 +36,15 @@ public class IsOptionalTest {
 
         assertThat(actualDescription.toString(),
                 is("an empty Optional"));
+    }
 
+    @Test void optionalShouldMatch() {
+
+        assertThat(Optional.of(3), IsOptional.isOptionalWithValue(3));
     }
 
 
-    @Test
-    public void optionalShouldMatch() throws Exception {
-
-        MatcherAssert.assertThat(Optional.of(3), IsOptional.isOptionalWithValue(3));
-
-    }
-
-
-    @Test
-    public void optionalWithWrongValueShouldNotMatch() throws Exception {
+    @Test void optionalWithWrongValueShouldNotMatch() {
 
         IsOptional opt = IsOptional.isOptionalWithValue(3);
 
@@ -69,8 +56,7 @@ public class IsOptionalTest {
     }
 
 
-    @Test
-    public void optionalWithEmptyValueShouldNotMatch() throws Exception {
+    @Test void optionalWithEmptyValueShouldNotMatch() {
 
         IsOptional opt = IsOptional.isOptionalWithValue(3);
 
@@ -82,8 +68,7 @@ public class IsOptionalTest {
     }
 
 
-    @Test
-    public void shouldDescribeOptional() throws Exception {
+    @Test void shouldDescribeOptional() {
 
         IsOptional opt = IsOptional.isOptionalWithValue(3);
 
@@ -92,13 +77,11 @@ public class IsOptionalTest {
 
         assertThat(actualDescription.toString(),
                 is("an Optional with the value <3>"));
-
     }
 
 
-    @Test
-    public void optionalShouldMatchAnything() throws Exception {
+    @Test void optionalShouldMatchAnything() {
 
-        MatcherAssert.assertThat(Optional.of(Integer.MAX_VALUE), IsOptional.isOptionalWithAnyValue());
+        assertThat(Optional.of(Integer.MAX_VALUE), IsOptional.isOptionalWithAnyValue());
     }
 }

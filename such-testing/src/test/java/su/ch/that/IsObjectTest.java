@@ -1,20 +1,17 @@
 package su.ch.that;
 
 import org.hamcrest.Description;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
-public class IsObjectTest {
+class IsObjectTest {
 
-
-    @Test
-    public void shouldDescribeObject() throws Exception {
+    @Test void shouldDescribeObject() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("objectMember",
@@ -39,9 +36,7 @@ public class IsObjectTest {
 
     }
 
-
-    @Test
-    public void shouldNotMatchWrongType() throws Exception {
+    @Test void shouldNotMatchWrongType() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("integer", is(3));
@@ -54,8 +49,7 @@ public class IsObjectTest {
     }
 
 
-    @Test
-    public void shouldDescribeNestedProperties() throws Exception {
+    @Test void shouldDescribeNestedProperties() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("objectMember",
@@ -75,8 +69,7 @@ public class IsObjectTest {
     }
 
 
-    @Test
-    public void shouldDescribeMultipleProperties() throws Exception {
+    @Test void shouldDescribeMultipleProperties() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("integer", is(5))
@@ -92,18 +85,16 @@ public class IsObjectTest {
     }
 
 
-    @Test
-    public void shouldMatchExistentProperty() throws Exception {
+    @Test void shouldMatchExistentProperty() {
 
-        MatcherAssert.assertThat(new TestClass(),
+        assertThat(new TestClass(),
                 IsObject.isInstanceOf(TestClass.class)
                         .whereProperty("integer", is(3)));
 
     }
 
 
-    @Test
-    public void shouldNotMatchNonExistentProperty() throws Exception {
+    @Test void shouldNotMatchNonExistentProperty() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("integer", is(5));
@@ -117,8 +108,7 @@ public class IsObjectTest {
     }
 
 
-    @Test
-    public void shouldNotMatchMissingMethod() throws Exception {
+    @Test void shouldNotMatchMissingMethod() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereProperty("missingProperty", is(anything()));
@@ -133,8 +123,7 @@ public class IsObjectTest {
     }
 
 
-    @Test
-    public void shouldNotMatchWhenExceptionThrown() throws Exception {
+    @Test void shouldNotMatchWhenExceptionThrown() {
 
         IsObject<TestClass> obj = IsObject.isInstanceOf(TestClass.class)
                 .whereMethod("throwsException", is(anything()));
@@ -149,8 +138,7 @@ public class IsObjectTest {
     }
 
 
-    @NotNull
-    private Description checkMismatch(IsObject<TestClass> obj) {
+    @NotNull private Description checkMismatch(IsObject<TestClass> obj) {
 
         Description actualDescription = new StringDescription();
         obj.describeMismatch(new TestClass(), actualDescription);
@@ -166,19 +154,16 @@ public class IsObjectTest {
             return 3;
         }
 
-
         String getString() {
 
             return "aString";
         }
-
 
         TestClass getObjectMember() {
 
             return new TestClass();
 
         }
-
 
         String throwsException() {
 

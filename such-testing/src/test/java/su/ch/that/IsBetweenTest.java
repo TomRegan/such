@@ -3,22 +3,20 @@ package su.ch.that;
 import org.hamcrest.Description;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class IsBetweenTest {
+class IsBetweenTest {
 
-    @Test
-    public void isInClosedIntervalShouldMatch() throws Exception {
+    @Test void isInClosedIntervalShouldMatch() {
 
         MatcherAssert.assertThat(1, IsBetween.isBetween(1, 1));
 
     }
 
-    @Test
-    public void isInClosedIntervalShouldNotMatchValueAbove() throws Exception {
+    @Test void isInClosedIntervalShouldNotMatchValueAbove() {
 
         IsBetween bet = IsBetween.isBetween(1, 2);
 
@@ -30,8 +28,7 @@ public class IsBetweenTest {
 
     }
 
-    @Test
-    public void isInClosedIntervalShouldNotMatchValueBelow() throws Exception {
+    @Test void isInClosedIntervalShouldNotMatchValueBelow() {
 
         IsBetween bet = IsBetween.isWithin(1, 2);
 
@@ -43,9 +40,7 @@ public class IsBetweenTest {
 
     }
 
-
-    @Test
-    public void describeTo() throws Exception {
+    @Test void describeTo() {
         IsBetween bet = IsBetween.isWithin(3, 5);
 
         Description actualDescription = new StringDescription();
