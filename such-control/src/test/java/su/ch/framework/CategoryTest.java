@@ -1,14 +1,13 @@
 package su.ch.framework;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static su.ch.IsComparable.isComparable;
 
-public class CategoryTest {
+class CategoryTest {
 
-    @Test
-    public void equalsContract() {
-        EqualsVerifier.forClass(Category.class).verify();
+    @Test void equalsAndHashcode() {
+        isComparable(Category.class);
     }
 
 }

@@ -1,6 +1,6 @@
 package su.ch;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -9,11 +9,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class TryTest {
+class TryTest {
 
-
-    @Test
-    public void failedCompletionShouldCallIfFailedCode() throws Exception {
+    @Test void failedCompletionShouldCallIfFailedCode() {
 
         Receiver receiver = new Receiver();
         Finisher mockFinisher = spy(new Finisher());
@@ -27,9 +25,7 @@ public class TryTest {
         verify(mockFinisher).failed(receiver);
     }
 
-    @Test
-    public void successfulCompletionShouldCallIfSuccessCode() throws Exception {
-
+    @Test void successfulCompletionShouldCallIfSuccessCode() {
 
         Receiver receiver = new Receiver();
         Finisher mockFinisher = spy(new Finisher());
@@ -37,14 +33,12 @@ public class TryTest {
         Try.with(receiver)
                 .doAction(Receiver::method1)
                 .doAction(Receiver::method2)
-                .ifSuccessful((it) -> mockFinisher.success(it));
+                .ifSuccessful(mockFinisher::success);
 
         verify(mockFinisher).success(receiver);
     }
 
-    @Test
-    public void failedCompletionShouldNotCallIfSuccessCode() throws Exception {
-
+    @Test void failedCompletionShouldNotCallIfSuccessCode() {
 
         Receiver receiver = new Receiver();
         Finisher mockFinisher = spy(new Finisher());
@@ -58,8 +52,7 @@ public class TryTest {
     }
 
 
-    @Test
-    public void doActionShouldNotTriggerActions() throws Exception {
+    @Test void doActionShouldNotTriggerActions() {
 
         Receiver mockReceiver = spy(new Receiver());
 
@@ -69,8 +62,7 @@ public class TryTest {
         verify(mockReceiver, never()).method1();
     }
 
-    @Test
-    public void doActionShouldSequenceActions() throws Exception {
+    @Test void doActionShouldSequenceActions() {
 
         Receiver mockReceiver = spy(new Receiver());
         InOrder inOrder = Mockito.inOrder(mockReceiver);
@@ -85,9 +77,7 @@ public class TryTest {
 
     }
 
-
-    @Test
-    public void rollbackShouldSequenceExceptionHandling() throws Exception {
+    @Test void rollbackShouldSequenceExceptionHandling() {
 
         Receiver mockReceiver = spy(new Receiver());
         InOrder inOrder = Mockito.inOrder(mockReceiver);
@@ -120,7 +110,7 @@ public class TryTest {
         }
 
 
-        int recover(Throwable ignored) {
+        int recover(@SuppressWarnings("unused") Throwable ignored) {
 
             return -1;
         }
@@ -134,11 +124,11 @@ public class TryTest {
 
     class Finisher {
 
-        void success(Receiver receiver) {
+        void success(@SuppressWarnings("unused") Receiver receiver) {
 
         }
 
-        void failed(Receiver receiver) {
+        void failed(@SuppressWarnings("unused") Receiver receiver) {
 
         }
     }

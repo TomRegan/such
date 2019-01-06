@@ -1,27 +1,23 @@
 package su.ch.framework;
 
-import static su.ch.Maybe.Just;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+import su.ch.Maybe;
 
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-import su.ch.Maybe;
+class ApplicativeTest extends FunctorTest {
 
-public class ApplicativeTest extends FunctorTest {
-
-
-    @Override
-    protected <A> Maybe<A> create(A value) {
+    @Override protected <A> Maybe<A> create(A value) {
 
         return Maybe.Just(value);
     }
 
 
-    @Test
-    public void firstApplicativeLaw_Identity() throws Exception {
+    @Test void firstApplicativeLaw_Identity() {
 
         // The first law of applicative functors states that if we apply the create identity function,
         // the applicative functor we get back should be the same as the original applicative
@@ -37,12 +33,12 @@ public class ApplicativeTest extends FunctorTest {
         Function<Integer, Integer> f = Function.identity();
         Maybe<Function<Integer, Integer>> applicative = create(f);
 
-        Assert.assertEquals(create(x), applicative.apply(Maybe.Just(x)));
+        assertThat(create(x), is(equalTo(applicative.apply(Maybe.Just(x)))));
+
     }
 
 
-    @Test
-    public void secondApplicativeLaw_Homomorphism() throws Exception {
+    @Test void secondApplicativeLaw_Homomorphism() {
 
         // The second law of applicative functors states that if we apply a pure function to a pure
         // value is the same as applying the function to the value and then using create on the
@@ -60,14 +56,13 @@ public class ApplicativeTest extends FunctorTest {
         int x = 5;
         Function<Integer, Integer> f = i -> i + x;
 
-        Assert.assertEquals(
-                (create(f)).apply(create(x)),
-                create(f.apply(x)));
+        assertThat(
+                create(f).apply(create(x)),
+                is(equalTo(create(f.apply(x)))));
     }
 
 
-    @Test
-    public void thirdApplicativeLaw_Interchange() throws Exception {
+    @Test void thirdApplicativeLaw_Interchange() {
 
         // The third law of applicative functors states that applying a morphism to a pure value is
         // the same as applying pure ($x) to the morphism - ($x) means a function that supplies x
@@ -87,14 +82,13 @@ public class ApplicativeTest extends FunctorTest {
         Function<Integer, Integer> f = i -> i + x;
         Function<Function<Integer, Integer>, Integer> $x = it -> it.apply(x);
 
-        Assert.assertEquals(
-                (create(f)).apply(create(x)),
-                (create($x)).apply(create(f)));
+        assertThat(
+                create(f).apply(create(x)),
+                is(equalTo(create($x).apply(create(f)))));
     }
 
 
-    @Test
-    public void fourthApplicativeLaw_Composition() throws Exception {
+    @Test void fourthApplicativeLaw_Composition() {
 
         // The fourth law of applicative functors states that if apply is used to compose morphisms
         // the composition is associative, like plain function composition.
@@ -112,9 +106,9 @@ public class ApplicativeTest extends FunctorTest {
         Maybe<Function<Integer, Integer>> v = create(fv);
         Function<Function<Integer, Integer>, Function<Integer, Integer>> _u = it -> it.compose(fu);
 
-        Assert.assertEquals(
+        assertThat(
                 u.apply(v.apply(w)),
-                (create(_u)).apply(v).apply(w));
+                is(equalTo(create(_u).apply(v).apply(w))));
 
     }
 

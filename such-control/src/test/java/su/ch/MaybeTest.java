@@ -1,39 +1,31 @@
 package su.ch;
 
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
 import su.ch.framework.Monad;
 
-import org.junit.Assert;
-import org.junit.Test;
-import su.ch.framework.Monad;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-import static su.ch.Maybe.Just;
-import static su.ch.Maybe.Nothing;
-import static org.junit.Assert.assertEquals;
+class MaybeTest {
 
-public class MaybeTest {
+    @Test void nothingShouldDoNothing() {
 
-    @Test
-    public void nothingShouldDoNothing() throws Exception {
-
-
-        Assert.assertEquals(Maybe.Nothing(),
-                Maybe.Nothing()
+        assertThat(Maybe.Nothing(),
+                is(equalTo(Maybe.Nothing()
                         .map((Integer i) -> i + 3)
                         .apply(Maybe.Just(5))
-                        .flatMap(Maybe::Just));
-
+                        .flatMap(Maybe::Just))));
     }
 
-
-    @Test
-    public void shouldMapBetweenTypesInCategory() throws Exception {
+    @Test void shouldMapBetweenTypesInCategory() {
 
         Monad<?, ?> justThree = Maybe.Just(3).map((Integer i) -> {
             if (i == 3) { return "three"; } else { return "unknown"; }
         });
 
-        Assert.assertEquals(Maybe.Just("three"), justThree);
-
+        assertThat(Maybe.Just("three"), is(equalTo(justThree)));
     }
 
 }

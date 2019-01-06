@@ -3,4 +3,5 @@ dependencies {
     "implementation"(project(":such-data"))
     "implementation"(project(":such-fun"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.11")
+    "testImplementation"(project(":such-testing"))
 }

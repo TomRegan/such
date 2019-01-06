@@ -1,29 +1,23 @@
 package su.ch.framework;
 
-import su.ch.Maybe;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import su.ch.Maybe;
 
 import java.util.function.Function;
 
-import static su.ch.Maybe.Just;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 
-public class FunctorTest {
+class FunctorTest {
 
-
-    @SuppressWarnings("unchecked")
     protected <A> Maybe<A> create(A value) {
 
         return Maybe.Just(value);
     }
 
-
-    @Test
-    public void firstFunctorLaw_Identity() throws Exception {
+    @Test void firstFunctorLaw_Identity() {
 
         // The first law of functors states that if we map the id function over a functor, the
         // functor that we get back should be the same as the original functor.
@@ -33,13 +27,12 @@ public class FunctorTest {
 
         Maybe<Integer> three = create(3);
 
-        Assert.assertEquals(Function.identity().apply(three), three.map(Function.identity()));
+        assertThat(Function.identity().apply(three), is(equalTo(three.map(Function.identity()))));
 
     }
 
 
-    @Test
-    public void secondFunctorLaw_Composition() throws Exception {
+    @Test void secondFunctorLaw_Composition() {
 
         // The second law of functors that composing two functions and then mapping the resulting
         // function over a functor should be the same as first mapping one function over the
@@ -62,7 +55,7 @@ public class FunctorTest {
         Functor<?, ?> byComposition = create(13)
                 .map(fDotG);
 
-        assertEquals(byAssociation, byComposition);
+        assertThat(byAssociation, is(equalTo(byComposition)));
 
     }
 
