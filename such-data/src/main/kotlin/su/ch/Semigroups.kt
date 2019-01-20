@@ -5,35 +5,26 @@ import su.ch.annotation.Pure
 import su.ch.framework.Semigroup
 import java.util.Objects.hash
 
-@Experimental
-class Semigroups {
+@Experimental class Semigroups {
 
     abstract class IntegerSemigroup<A : Semigroup<Int, A>> protected constructor(val value: Int) : Semigroup<Int, A> {
 
-        @Pure
-        protected fun plus(a: Int, b: Int): Int = a.plus(b)
-        @Pure
-        protected fun max(a: Int, b: Int): Int = Math.max(a, b)
-        @Pure
-        protected fun min(a: Int, b: Int): Int = Math.min(a, b)
-        @Pure
-        protected fun multiply(a: Int, b: Int): Int = a.times(b)
-
-        @Pure
-        override fun toString(): String =
+        @Pure protected fun plus(a: Int, b: Int): Int = a.plus(b)
+        @Pure protected fun max(a: Int, b: Int): Int = Math.max(a, b)
+        @Pure protected fun min(a: Int, b: Int): Int = Math.min(a, b)
+        @Pure protected fun multiply(a: Int, b: Int): Int = a.times(b)
+        @Pure override fun toString(): String =
                 ToString(this)
                         .addValue(value)
                         .toString()
 
-        @Pure
-        final override fun equals(other: Any?): Boolean =
+        @Pure final override fun equals(other: Any?): Boolean =
                 this === other
                         || other != null
                         && other is IntegerSemigroup<*>
                         && value == other.value
 
-        @Pure
-        final override fun hashCode(): Int = value
+        @Pure final override fun hashCode(): Int = value
     }
 
     class IntegerAddition(value: Int) : IntegerSemigroup<IntegerAddition>(value) {
@@ -54,23 +45,16 @@ class Semigroups {
 
     abstract class LongSemigroup<A : Semigroup<Long, A>> protected constructor(val value: Long) : Semigroup<Long, A> {
 
-        @Pure
-        protected fun plus(a: Long, b: Long): Long = a.plus(b)
-        @Pure
-        protected fun max(a: Long, b: Long): Long = Math.max(a, b)
-        @Pure
-        protected fun min(a: Long, b: Long): Long = Math.min(a, b)
-        @Pure
-        protected fun multiply(a: Long, b: Long): Long = a.times(b)
-
-        @Pure
-        override fun toString(): String =
+        @Pure protected fun plus(a: Long, b: Long): Long = a.plus(b)
+        @Pure protected fun max(a: Long, b: Long): Long = Math.max(a, b)
+        @Pure protected fun min(a: Long, b: Long): Long = Math.min(a, b)
+        @Pure protected fun multiply(a: Long, b: Long): Long = a.times(b)
+        @Pure override fun toString(): String =
                 ToString(this)
                         .addValue(value)
                         .toString()
 
-        @Pure
-        final override fun equals(other: Any?): Boolean =
+        @Pure final override fun equals(other: Any?): Boolean =
                 this === other
                         || other != null
                         && other is LongSemigroup<*>
