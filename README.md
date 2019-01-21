@@ -5,7 +5,7 @@
 # 🧭 Getting Started
 Such isn't intended to be used - it's just an experiment! But welcome 👋 take a look around and feel free to hmu 🙂
 
-`./gradlew build`
+`./gradlew build` will get you started.
 
 # 💡 What Is such
 
@@ -14,9 +14,9 @@ Annotations for intentional programming
 ## such-control
 Functional control structures
 ## such-data
-Functional data types
+Functional data structures and group-likes
 ## such-fun
-Functional basics
+Higher order functions
 ## such-testing
 Extensions and tools for testing
 
