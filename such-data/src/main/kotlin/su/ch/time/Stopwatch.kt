@@ -48,10 +48,9 @@ import javax.annotation.concurrent.ThreadSafe
     // Monoidal members
 
     /**
-     * The identity function. The identity for a given stopwatch is its current value.
-     * Be aware, the result is a [StoppedStopwatch] representing a duration at an instant.
+     * The identity function. The identity for a given stopwatch is zero.
      */
-    @Pure override fun id(): StoppedStopwatch = StoppedStopwatch(elapsed())
+    @Pure override fun id(): StoppedStopwatch = StoppedStopwatch()
 
     /**
      * The associative operation which advances elapsed time.
@@ -141,7 +140,7 @@ import javax.annotation.concurrent.ThreadSafe
     class RunningStopwatch(offset: Duration = Duration.ZERO) : Stopwatch() {
         private val startTime = System.nanoTime() - offset.abs().toNanos()
         @Pure override fun elapsed(): Duration = Duration.ofNanos(System.nanoTime() - startTime)
-        @Pure fun stop(): StoppedStopwatch = id()
+        @Pure fun stop(): StoppedStopwatch = StoppedStopwatch(elapsed())
         @Pure override fun isRunning(): Boolean = true
         @Pure fun apply(function: Consumer<Duration>): RunningStopwatch {
             function.accept(elapsed())
@@ -149,7 +148,7 @@ import javax.annotation.concurrent.ThreadSafe
         }
     }
 
-    class StoppedStopwatch(private val elapsed: Duration) : Stopwatch() {
+    class StoppedStopwatch(private val elapsed: Duration = Duration.ZERO) : Stopwatch() {
         @Pure override fun isRunning(): Boolean = false
         @Pure override fun elapsed(): Duration = elapsed
         @Pure fun apply(function: Consumer<Duration>): StoppedStopwatch {
