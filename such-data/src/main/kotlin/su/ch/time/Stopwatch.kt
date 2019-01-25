@@ -44,7 +44,7 @@ import javax.annotation.concurrent.ThreadSafe
      *
      * Note that the overhead of measurement can be more than a microsecond.
      */
-    @Impure abstract fun elapsed(): Duration
+    @Pure abstract fun elapsed(): Duration
 
     // Monoidal members
 
@@ -57,7 +57,7 @@ import javax.annotation.concurrent.ThreadSafe
      * The associative operation which advances elapsed time.
      * Be aware, the result is a [StoppedStopwatch] representing a duration at a (usually notional) instant.
      */
-    @Impure override fun append(value: Stopwatch): StoppedStopwatch = StoppedStopwatch(elapsed() + value.elapsed())
+    @Pure override fun append(value: Stopwatch): StoppedStopwatch = StoppedStopwatch(elapsed() + value.elapsed())
 
     // Members for displaying elapsed time
 
@@ -83,9 +83,9 @@ import javax.annotation.concurrent.ThreadSafe
      *
      * @return an ISO-8601 representation of this duration, not null
      */
-    @Impure override fun toString(): String = elapsed().toString()
+    @Pure override fun toString(): String = elapsed().toString()
 
-    @Impure fun humanReadable(): String {
+    @Pure open fun humanReadable(): String {
         val elapsed = elapsed()
         val timeUnit = timeUnitFromNanoseconds(elapsed.toNanos())
         val duration = elapsed.toNanos().toDouble() / NANOSECONDS.convert(1L, timeUnit).toDouble()
@@ -130,7 +130,7 @@ import javax.annotation.concurrent.ThreadSafe
 
     class ReadyStopwatch(private val offset: Duration = Duration.ZERO) : Stopwatch() {
         @Pure fun start(): RunningStopwatch = RunningStopwatch(offset = offset)
-        @Impure override fun elapsed(): Duration = offset.abs()
+        @Pure override fun elapsed(): Duration = offset.abs()
         @Pure override fun isRunning(): Boolean = false
         @Pure fun apply(function: Consumer<Duration>): ReadyStopwatch {
             function.accept(elapsed())
@@ -139,11 +139,37 @@ import javax.annotation.concurrent.ThreadSafe
     }
 
     class RunningStopwatch(offset: Duration = Duration.ZERO) : Stopwatch() {
+        // due to the calculation of a new offset from `startTime` for every `elapsed` call
+        // functions in a `RunningStopwatch` are usually impure
         private val startTime = System.nanoTime() - offset.abs().toNanos()
+
+        /**
+         * @inheritDoc
+         * The effect of calling `elapsed` on a `RunningStopwatch` is [Impure]
+         */
         @Impure override fun elapsed(): Duration = Duration.ofNanos(System.nanoTime() - startTime)
+
         @Impure fun stop(): StoppedStopwatch = StoppedStopwatch(elapsed())
         @Pure override fun isRunning(): Boolean = true
-        @Pure fun apply(function: Consumer<Duration>): RunningStopwatch {
+        /**
+         * @inheritDoc
+         * The effect of calling `append` on a `RunningStopwatch` is [Impure]
+         */
+        @Impure override fun append(value: Stopwatch): StoppedStopwatch = super.append(value)
+
+        /**
+         * @inheritDoc
+         * The effect of calling `toString` on a `RunningStopwatch` is [Impure]
+         */
+        @Impure override fun toString(): String = super.toString()
+
+        /**
+         * @inheritDoc
+         * The effect of calling `humanReadable` on a `RunningStopwatch` is [Impure]
+         */
+        @Impure override fun humanReadable(): String = super.humanReadable()
+
+        @Impure fun apply(function: Consumer<Duration>): RunningStopwatch {
             function.accept(elapsed())
             return this
         }
@@ -151,7 +177,7 @@ import javax.annotation.concurrent.ThreadSafe
 
     class StoppedStopwatch(private val elapsed: Duration = Duration.ZERO) : Stopwatch() {
         @Pure override fun isRunning(): Boolean = false
-        @Impure override fun elapsed(): Duration = elapsed
+        @Pure override fun elapsed(): Duration = elapsed
         @Pure fun apply(function: Consumer<Duration>): StoppedStopwatch {
             function.accept(elapsed())
             return this
