@@ -35,9 +35,7 @@ import javax.annotation.concurrent.ThreadSafe
     /**
      * Sets the elapsed time for this Stopwatch to zero and places it in a stopped state.
      */
-    @Pure fun reset(): ReadyStopwatch {
-        return ReadyStopwatch()
-    }
+    @Pure fun reset(): ReadyStopwatch = ReadyStopwatch()
 
     /**
      * Returns the current elapsed time shown on this timer.
@@ -83,13 +81,12 @@ import javax.annotation.concurrent.ThreadSafe
      *
      * @return an ISO-8601 representation of this duration, not null
      */
-    @Pure override fun toString(): String = elapsed().toString()
+    @Pure override fun toString(): String = with(elapsed()) { toString() }
 
-    @Pure open fun humanReadable(): String {
-        val elapsed = elapsed()
-        val timeUnit = timeUnitFromNanoseconds(elapsed.toNanos())
-        val duration = elapsed.toNanos().toDouble() / NANOSECONDS.convert(1L, timeUnit).toDouble()
-        return String.format("%.4g %s", duration, timeUnit.symbol())
+    @Pure open fun humanReadable(): String = with(elapsed()) {
+        val timeUnit = timeUnitFromNanoseconds(toNanos())
+        val duration = toNanos().toDouble() / NANOSECONDS.convert(1L, timeUnit).toDouble()
+        String.format("%.4g %s", duration, timeUnit.symbol())
     }
 
     private fun timeUnitFromNanoseconds(nanoseconds: Long): TimeUnit =
@@ -103,10 +100,7 @@ import javax.annotation.concurrent.ThreadSafe
                 else -> DAYS
             }
 
-    private fun TimeUnit.symbol(): String {
-        // timeUnitSymbol.size is known at compile time (ie size > 0 is invariant) so this is a safe bounds reference
-        return timeUnitSymbol[minOf(timeUnitSymbol.size - 1, this.ordinal)]
-    }
+    private fun TimeUnit.symbol(): String = timeUnitSymbol[minOf(timeUnitSymbol.size - 1, this.ordinal)]
 
     companion object {
 
@@ -132,10 +126,7 @@ import javax.annotation.concurrent.ThreadSafe
         @Pure fun start(): RunningStopwatch = RunningStopwatch(offset = offset)
         @Pure override fun elapsed(): Duration = offset.abs()
         @Pure override fun isRunning(): Boolean = false
-        @Pure fun apply(function: Consumer<Duration>): ReadyStopwatch {
-            function.accept(elapsed())
-            return this
-        }
+        @Pure fun apply(function: Consumer<Duration>): ReadyStopwatch = apply { function.accept(elapsed()) }
     }
 
     class RunningStopwatch(offset: Duration = Duration.ZERO) : Stopwatch() {
@@ -169,19 +160,13 @@ import javax.annotation.concurrent.ThreadSafe
          */
         @Impure override fun humanReadable(): String = super.humanReadable()
 
-        @Impure fun apply(function: Consumer<Duration>): RunningStopwatch {
-            function.accept(elapsed())
-            return this
-        }
+        @Impure fun apply(function: Consumer<Duration>): RunningStopwatch = apply { function.accept(elapsed()) }
     }
 
     class StoppedStopwatch(private val elapsed: Duration = Duration.ZERO) : Stopwatch() {
         @Pure override fun isRunning(): Boolean = false
         @Pure override fun elapsed(): Duration = elapsed
-        @Pure fun apply(function: Consumer<Duration>): StoppedStopwatch {
-            function.accept(elapsed())
-            return this
-        }
+        @Pure fun apply(function: Consumer<Duration>): StoppedStopwatch = apply { function.accept(elapsed()) }
     }
 
     private object Nanoseconds {
