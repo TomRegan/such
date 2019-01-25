@@ -3,6 +3,7 @@
 package su.ch.time
 
 import su.ch.annotation.Beta
+import su.ch.annotation.Impure
 import su.ch.annotation.Pure
 import su.ch.framework.Monoid
 import su.ch.time.Stopwatch.Nanoseconds.oneDay
@@ -43,7 +44,7 @@ import javax.annotation.concurrent.ThreadSafe
      *
      * Note that the overhead of measurement can be more than a microsecond.
      */
-    @Pure abstract fun elapsed(): Duration
+    @Impure abstract fun elapsed(): Duration
 
     // Monoidal members
 
@@ -56,7 +57,7 @@ import javax.annotation.concurrent.ThreadSafe
      * The associative operation which advances elapsed time.
      * Be aware, the result is a [StoppedStopwatch] representing a duration at a (usually notional) instant.
      */
-    @Pure override fun append(value: Stopwatch): StoppedStopwatch = StoppedStopwatch(elapsed() + value.elapsed())
+    @Impure override fun append(value: Stopwatch): StoppedStopwatch = StoppedStopwatch(elapsed() + value.elapsed())
 
     // Members for displaying elapsed time
 
@@ -82,9 +83,9 @@ import javax.annotation.concurrent.ThreadSafe
      *
      * @return an ISO-8601 representation of this duration, not null
      */
-    @Pure override fun toString(): String = elapsed().toString()
+    @Impure override fun toString(): String = elapsed().toString()
 
-    @Pure fun humanReadable(): String {
+    @Impure fun humanReadable(): String {
         val elapsed = elapsed()
         val timeUnit = timeUnitFromNanoseconds(elapsed.toNanos())
         val duration = elapsed.toNanos().toDouble() / NANOSECONDS.convert(1L, timeUnit).toDouble()
@@ -129,7 +130,7 @@ import javax.annotation.concurrent.ThreadSafe
 
     class ReadyStopwatch(private val offset: Duration = Duration.ZERO) : Stopwatch() {
         @Pure fun start(): RunningStopwatch = RunningStopwatch(offset = offset)
-        @Pure override fun elapsed(): Duration = offset.abs()
+        @Impure override fun elapsed(): Duration = offset.abs()
         @Pure override fun isRunning(): Boolean = false
         @Pure fun apply(function: Consumer<Duration>): ReadyStopwatch {
             function.accept(elapsed())
@@ -139,8 +140,8 @@ import javax.annotation.concurrent.ThreadSafe
 
     class RunningStopwatch(offset: Duration = Duration.ZERO) : Stopwatch() {
         private val startTime = System.nanoTime() - offset.abs().toNanos()
-        @Pure override fun elapsed(): Duration = Duration.ofNanos(System.nanoTime() - startTime)
-        @Pure fun stop(): StoppedStopwatch = StoppedStopwatch(elapsed())
+        @Impure override fun elapsed(): Duration = Duration.ofNanos(System.nanoTime() - startTime)
+        @Impure fun stop(): StoppedStopwatch = StoppedStopwatch(elapsed())
         @Pure override fun isRunning(): Boolean = true
         @Pure fun apply(function: Consumer<Duration>): RunningStopwatch {
             function.accept(elapsed())
@@ -150,7 +151,7 @@ import javax.annotation.concurrent.ThreadSafe
 
     class StoppedStopwatch(private val elapsed: Duration = Duration.ZERO) : Stopwatch() {
         @Pure override fun isRunning(): Boolean = false
-        @Pure override fun elapsed(): Duration = elapsed
+        @Impure override fun elapsed(): Duration = elapsed
         @Pure fun apply(function: Consumer<Duration>): StoppedStopwatch {
             function.accept(elapsed())
             return this
