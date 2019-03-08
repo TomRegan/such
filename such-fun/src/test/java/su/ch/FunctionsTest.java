@@ -8,8 +8,9 @@ import java.util.function.Function;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static su.ch.Assertions.assertAll;
+import static su.ch.Assertions.assertThrows;
 import static su.ch.IsComparable.isComparable;
-import static su.ch.MustThrow.mustThrow;
 
 @SuppressWarnings("ConstantConditions")
 class FunctionsTest {
@@ -41,8 +42,11 @@ class FunctionsTest {
         }
 
         @Test void parametersError() {
-            mustThrow(IllegalArgumentException.class, () -> Functions.compose(Functions.id(), null));
-            mustThrow(IllegalArgumentException.class, () -> Functions.compose(null, Functions.id()));
+            assertAll(
+                    () -> assertThrows(IllegalArgumentException.class,
+                            () -> Functions.compose(Functions.id(), null)),
+                    () -> assertThrows(IllegalArgumentException.class,
+                            () -> Functions.compose(null, Functions.id())));
         }
     }
 
@@ -66,17 +70,17 @@ class FunctionsTest {
         }
 
         @Test void functionApplicationNullContext() {
-            mustThrow(IllegalArgumentException.class, () -> Functions.ap(f, null).apply(2));
+            assertThrows(IllegalArgumentException.class, () -> Functions.ap(f, null).apply(2));
         }
 
         @Test void functionApplicationNullStart() {
-            mustThrow(IllegalArgumentException.class, () -> Functions.ap(null, g).apply(2));
+            assertThrows(IllegalArgumentException.class, () -> Functions.ap(null, g).apply(2));
         }
 
         @Test void functionApplicationAllNull() {
             Function<Integer, String> f = null;
             Function<Integer, Function<String, Boolean>> g = null;
-            mustThrow(IllegalArgumentException.class, () -> Functions.ap(f, g).apply(2));
+            assertThrows(IllegalArgumentException.class, () -> Functions.ap(f, g).apply(2));
         }
 
     }

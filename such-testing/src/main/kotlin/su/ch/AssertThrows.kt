@@ -3,13 +3,12 @@
 package su.ch
 
 
-object MustThrow {
+internal object AssertThrows {
 
-    @JvmStatic
-    fun <T : Throwable> mustThrow(exception: Class<T>, given: Runnable): T {
+    internal fun <T : Throwable> assertThrows(exception: Class<T>, runnable: Runnable): T {
 
         try {
-            given.run()
+            runnable.run()
         } catch (actualException: Throwable) {
             return when {
                 exception.isInstance(actualException) -> actualException as T
